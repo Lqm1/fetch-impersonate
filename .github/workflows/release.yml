@@ -28,6 +28,7 @@ jobs:
           node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
+          package-manager-cache: false
       - run: pnpm install --frozen-lockfile
       - run: pnpm check:package-metadata
       - name: Verify tag and package versions match
@@ -57,12 +58,8 @@ jobs:
         shell: bash
         run: |
           for package in .artifacts/release-native/*.tgz; do
-            npm publish "$package" --access public --provenance --ignore-scripts
+            npm publish "$package" --access public --ignore-scripts
           done
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish root package last
         shell: bash
-        run: npm publish .artifacts/release-root/*.tgz --access public --provenance --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish .artifacts/release-root/*.tgz --access public --ignore-scripts
