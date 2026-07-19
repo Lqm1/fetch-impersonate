@@ -75,6 +75,7 @@ async function run(command: string, args: string[], cwd: string): Promise<string
   return new Promise((resolveRun, rejectRun) => {
     let executable = command;
     let executableArguments = args;
+    let useShell = false;
     if (process.platform === "win32" && command === "npm") {
       executable = process.execPath;
       executableArguments = [
@@ -82,9 +83,10 @@ async function run(command: string, args: string[], cwd: string): Promise<string
         ...args,
       ];
     } else if (process.platform === "win32" && command === "pnpm") {
-      executable = "pnpm.exe";
+      executable = "pnpm";
+      useShell = true;
     }
-    const child = spawn(executable, executableArguments, { cwd, shell: false });
+    const child = spawn(executable, executableArguments, { cwd, shell: useShell });
     let stdout = "";
     let stderr = "";
     child.stdout.on("data", (chunk: Buffer) => { stdout += chunk.toString(); });
