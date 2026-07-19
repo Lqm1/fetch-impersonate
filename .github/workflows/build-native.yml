@@ -47,11 +47,11 @@ jobs:
             msvc: arm64
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
           version: 10.13.1
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -78,7 +78,7 @@ jobs:
       - run: pnpm test
       - run: pnpm smoke:native
       - run: pnpm smoke:install
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: native-${{ matrix.target }}
           path: .artifacts/npm/*.tgz
@@ -98,7 +98,7 @@ jobs:
             runner: ubuntu-24.04-arm
     runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build and test inside musl
         shell: bash
         run: |
@@ -133,7 +133,7 @@ jobs:
               pnpm smoke:native
               pnpm smoke:install
             '
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: native-${{ matrix.target }}
           path: .artifacts/npm/*.tgz
@@ -153,12 +153,12 @@ jobs:
             packages: gcc-riscv64-linux-gnu g++-riscv64-linux-gnu
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: docker/setup-qemu-action@v3
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: docker/setup-qemu-action@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 10.13.1
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -194,7 +194,7 @@ jobs:
           -v "$GITHUB_WORKSPACE:/work" -w /work debian:sid-slim
           sh -euxc 'apt-get update; apt-get install --yes nodejs;
           node scripts/native-smoke.cjs --target linux-riscv64-gnu'
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: native-${{ matrix.target }}
           path: .artifacts/npm/*.tgz
@@ -204,16 +204,16 @@ jobs:
     name: android-arm64 (experimental)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
           version: 10.13.1
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
       - uses: dtolnay/rust-toolchain@stable
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
       - run: sdkmanager --install "ndk;28.2.13676358"
       - name: Configure Android NDK
         shell: bash
@@ -238,7 +238,7 @@ jobs:
           arch: x86_64
           profile: pixel_7
           script: pnpm smoke:android
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: native-android-arm64
           path: .artifacts/npm/*.tgz
