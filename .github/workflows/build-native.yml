@@ -105,17 +105,26 @@ jobs:
           docker run --rm \
             -v "$GITHUB_WORKSPACE:/work" \
             -w /work \
+            -e RUST_TARGET=${{ matrix.rust }} \
             rust:1.94-alpine \
             sh -euxc '
               apk add --no-cache bash binutils build-base nodejs npm tar
               npm install --global pnpm@10.13.1
               pnpm install --frozen-lockfile
               pnpm exec tsx scripts/prepare-native.ts --target ${{ matrix.target }}
+              # The Alpine image is already a native musl environment, so point
+              # the Rust target at the system gcc/g++/ar instead of the missing
+              # <triple>-linux-musl-gcc cross wrapper that rustc defaults to.
+              target_key=$(printf "%s" "$RUST_TARGET" | tr "[:lower:]-" "[:upper:]_")
+              export CC_${RUST_TARGET//-/_}=gcc
+              export CXX_${RUST_TARGET//-/_}=g++
+              export AR_${RUST_TARGET//-/_}=ar
+              export CARGO_TARGET_${target_key}_LINKER=gcc
               pnpm exec napi build --platform --release \
                 --manifest-path crates/native/Cargo.toml \
                 --package-json-path package.json \
                 --output-dir crates/native \
-                --target ${{ matrix.rust }}
+                --target "$RUST_TARGET"
               pnpm exec tsx scripts/package-native.ts --target ${{ matrix.target }}
               pnpm exec tsx scripts/verify-linkage.ts --target ${{ matrix.target }}
               pnpm exec tsx scripts/pack-native.ts --target ${{ matrix.target }}
