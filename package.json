@@ -1,6 +1,6 @@
 {
   "name": "fetch-impersonate",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.2",
   "description": "A Fetch API-compatible transport powered by libcurl-impersonate",
   "license": "MIT",
   "type": "module",
@@ -72,18 +72,18 @@
     "vitest": "4.1.10"
   },
   "optionalDependencies": {
-    "@fetch-impersonate/native-darwin-x64": "0.1.0",
-    "@fetch-impersonate/native-darwin-arm64": "0.1.0",
-    "@fetch-impersonate/native-win32-x64-msvc": "0.1.0",
-    "@fetch-impersonate/native-win32-arm64-msvc": "0.1.0",
-    "@fetch-impersonate/native-linux-x64-gnu": "0.1.0",
-    "@fetch-impersonate/native-linux-arm64-gnu": "0.1.0",
-    "@fetch-impersonate/native-linux-x64-musl": "0.1.0",
-    "@fetch-impersonate/native-linux-arm64-musl": "0.1.0",
-    "@fetch-impersonate/native-linux-ia32-gnu": "0.1.0",
-    "@fetch-impersonate/native-linux-arm-gnueabihf": "0.1.0",
-    "@fetch-impersonate/native-linux-riscv64-gnu": "0.1.0",
-    "@fetch-impersonate/native-android-arm64": "0.1.0"
+    "@fetch-impersonate/native-darwin-x64": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-darwin-arm64": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-win32-x64-msvc": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-win32-arm64-msvc": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-x64-gnu": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-arm64-gnu": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-x64-musl": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-arm64-musl": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-ia32-gnu": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-arm-gnueabihf": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-linux-riscv64-gnu": "0.1.0-alpha.2",
+    "@fetch-impersonate/native-android-arm64": "0.1.0-alpha.2"
   },
   "packageManager": "pnpm@10.13.1"
 }
