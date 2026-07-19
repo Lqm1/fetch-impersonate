@@ -3,6 +3,10 @@
   "version": "0.1.0-alpha.2",
   "description": "Native binding for fetch-impersonate on Linux ARMv7 glibc",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lqm1/fetch-impersonate"
+  },
   "os": ["linux"],
   "cpu": ["arm"],
   "libc": ["glibc"],

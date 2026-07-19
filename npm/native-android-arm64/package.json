@@ -3,6 +3,10 @@
   "version": "0.1.0-alpha.2",
   "description": "Experimental native binding for fetch-impersonate on Android ARM64",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lqm1/fetch-impersonate"
+  },
   "os": ["android"],
   "cpu": ["arm64"],
   "main": "fetch-impersonate.android-arm64.node",

@@ -3,6 +3,10 @@
   "version": "0.1.0-alpha.2",
   "description": "Native binding for fetch-impersonate on Windows x64",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lqm1/fetch-impersonate"
+  },
   "os": ["win32"],
   "cpu": ["x64"],
   "main": "fetch-impersonate.win32-x64-msvc.node",

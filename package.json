@@ -3,6 +3,10 @@
   "version": "0.1.0-alpha.2",
   "description": "A Fetch API-compatible transport powered by libcurl-impersonate",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lqm1/fetch-impersonate"
+  },
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
