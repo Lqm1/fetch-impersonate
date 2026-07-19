@@ -57,9 +57,18 @@ jobs:
       - name: Publish platform packages
         shell: bash
         run: |
+          DIST_TAG="latest"
+          if [[ "$(node -p "require('./package.json').version")" == *-* ]]; then
+            DIST_TAG="alpha"
+          fi
           for package in .artifacts/release-native/*.tgz; do
-            npm publish "$package" --access public --ignore-scripts
+            npm publish "$package" --access public --ignore-scripts --tag "$DIST_TAG"
           done
       - name: Publish root package last
         shell: bash
-        run: npm publish .artifacts/release-root/*.tgz --access public --ignore-scripts
+        run: |
+          DIST_TAG="latest"
+          if [[ "$(node -p "require('./package.json').version")" == *-* ]]; then
+            DIST_TAG="alpha"
+          fi
+          npm publish .artifacts/release-root/*.tgz --access public --ignore-scripts --tag "$DIST_TAG"
