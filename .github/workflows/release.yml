@@ -57,18 +57,26 @@ jobs:
       - name: Publish platform packages
         shell: bash
         run: |
-          DIST_TAG="latest"
-          if [[ "$(node -p "require('./package.json').version")" == *-* ]]; then
-            DIST_TAG="alpha"
-          fi
+          VERSION="$(node -p "require('./package.json').version")"
+          case "$VERSION" in
+            *-alpha.*) DIST_TAG="alpha" ;;
+            *-beta.*)  DIST_TAG="beta"  ;;
+            *-rc.*)    DIST_TAG="rc"    ;;
+            *)         DIST_TAG="latest" ;;
+          esac
+          echo "Publishing channel: $DIST_TAG (version $VERSION)"
           for package in .artifacts/release-native/*.tgz; do
             npm stage publish "$package" --access public --ignore-scripts --tag "$DIST_TAG"
           done
       - name: Publish root package last
         shell: bash
         run: |
-          DIST_TAG="latest"
-          if [[ "$(node -p "require('./package.json').version")" == *-* ]]; then
-            DIST_TAG="alpha"
-          fi
+          VERSION="$(node -p "require('./package.json').version")"
+          case "$VERSION" in
+            *-alpha.*) DIST_TAG="alpha" ;;
+            *-beta.*)  DIST_TAG="beta"  ;;
+            *-rc.*)    DIST_TAG="rc"    ;;
+            *)         DIST_TAG="latest" ;;
+          esac
+          echo "Publishing root package channel: $DIST_TAG (version $VERSION)"
           npm stage publish .artifacts/release-root/*.tgz --access public --ignore-scripts --tag "$DIST_TAG"
