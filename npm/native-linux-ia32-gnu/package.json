@@ -1,0 +1,11 @@
+{
+  "name": "@fetch-impersonate/native-linux-ia32-gnu",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on Linux i686 glibc",
+  "license": "MIT",
+  "os": ["linux"],
+  "cpu": ["ia32"],
+  "libc": ["glibc"],
+  "main": "fetch-impersonate.linux-ia32-gnu.node",
+  "files": ["fetch-impersonate.linux-ia32-gnu.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

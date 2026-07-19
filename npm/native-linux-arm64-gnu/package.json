@@ -1,0 +1,11 @@
+{
+  "name": "@fetch-impersonate/native-linux-arm64-gnu",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on Linux ARM64 glibc",
+  "license": "MIT",
+  "os": ["linux"],
+  "cpu": ["arm64"],
+  "libc": ["glibc"],
+  "main": "fetch-impersonate.linux-arm64-gnu.node",
+  "files": ["fetch-impersonate.linux-arm64-gnu.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

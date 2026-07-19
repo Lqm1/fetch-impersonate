@@ -1,0 +1,10 @@
+{
+  "name": "@fetch-impersonate/native-darwin-arm64",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on macOS ARM64",
+  "license": "MIT",
+  "os": ["darwin"],
+  "cpu": ["arm64"],
+  "main": "fetch-impersonate.darwin-arm64.node",
+  "files": ["fetch-impersonate.darwin-arm64.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@fetch-impersonate/native-win32-arm64-msvc",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on Windows ARM64",
+  "license": "MIT",
+  "os": ["win32"],
+  "cpu": ["arm64"],
+  "main": "fetch-impersonate.win32-arm64-msvc.node",
+  "files": ["fetch-impersonate.win32-arm64-msvc.node", "libcurl-impersonate.dll", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

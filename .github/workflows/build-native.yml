@@ -1,0 +1,236 @@
+name: Build native packages
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "crates/**"
+      - "src/**"
+      - "scripts/**"
+      - "npm/**"
+      - "native-targets.json"
+      - "vendor/curl-impersonate.lock.json"
+      - ".github/workflows/build-native.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  native:
+    name: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64-gnu
+            rust: x86_64-unknown-linux-gnu
+            runner: ubuntu-24.04
+          - target: linux-arm64-gnu
+            rust: aarch64-unknown-linux-gnu
+            runner: ubuntu-24.04-arm
+          - target: darwin-x64
+            rust: x86_64-apple-darwin
+            runner: macos-15-intel
+          - target: darwin-arm64
+            rust: aarch64-apple-darwin
+            runner: macos-15
+          - target: win32-x64-msvc
+            rust: x86_64-pc-windows-msvc
+            runner: windows-2025
+            msvc: x64
+          - target: win32-arm64-msvc
+            rust: aarch64-pc-windows-msvc
+            runner: windows-11-arm
+            msvc: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.rust }}
+      - if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.msvc }}
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/prepare-native.ts --target ${{ matrix.target }}
+      - name: Build addon
+        run: >-
+          pnpm exec napi build --platform --release
+          --manifest-path crates/native/Cargo.toml
+          --package-json-path package.json
+          --output-dir crates/native
+          --target ${{ matrix.rust }}
+      - run: pnpm exec tsx scripts/package-native.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/verify-linkage.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/pack-native.ts --target ${{ matrix.target }}
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm smoke:native
+      - run: pnpm smoke:install
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.target }}
+          path: .artifacts/npm/*.tgz
+          if-no-files-found: error
+
+  musl:
+    name: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-x64-musl
+            rust: x86_64-unknown-linux-musl
+            runner: ubuntu-24.04
+          - target: linux-arm64-musl
+            rust: aarch64-unknown-linux-musl
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Build and test inside musl
+        shell: bash
+        run: |
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -w /work \
+            rust:1.94-alpine \
+            sh -euxc '
+              apk add --no-cache bash binutils build-base nodejs npm tar
+              npm install --global pnpm@10.13.1
+              pnpm install --frozen-lockfile
+              pnpm exec tsx scripts/prepare-native.ts --target ${{ matrix.target }}
+              pnpm exec napi build --platform --release \
+                --manifest-path crates/native/Cargo.toml \
+                --package-json-path package.json \
+                --output-dir crates/native \
+                --target ${{ matrix.rust }}
+              pnpm exec tsx scripts/package-native.ts --target ${{ matrix.target }}
+              pnpm exec tsx scripts/verify-linkage.ts --target ${{ matrix.target }}
+              pnpm exec tsx scripts/pack-native.ts --target ${{ matrix.target }}
+              pnpm typecheck
+              pnpm test
+              pnpm smoke:native
+              pnpm smoke:install
+            '
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.target }}
+          path: .artifacts/npm/*.tgz
+          if-no-files-found: error
+
+  extended-gnu:
+    name: ${{ matrix.target }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux-ia32-gnu
+            packages: gcc-i686-linux-gnu g++-i686-linux-gnu
+          - target: linux-arm-gnueabihf
+            packages: gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf
+          - target: linux-riscv64-gnu
+            packages: gcc-riscv64-linux-gnu g++-riscv64-linux-gnu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: docker/setup-qemu-action@v3
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - run: sudo apt-get update
+      - run: sudo apt-get install --yes binutils ${{ matrix.packages }}
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/prepare-native.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/build-native-target.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/package-native.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/verify-linkage.ts --target ${{ matrix.target }}
+      - run: pnpm exec tsx scripts/pack-native.ts --target ${{ matrix.target }}
+      - name: Load addon and perform HTTP request on Linux i686
+        if: matrix.target == 'linux-ia32-gnu'
+        shell: bash
+        run: >-
+          docker run --rm --platform linux/386
+          -v "$GITHUB_WORKSPACE:/work" -w /work debian:trixie-slim
+          sh -euxc 'apt-get update; apt-get install --yes nodejs;
+          node scripts/native-smoke.cjs --target linux-ia32-gnu'
+      - name: Load addon and perform HTTP request on Linux ARMv7
+        if: matrix.target == 'linux-arm-gnueabihf'
+        shell: bash
+        run: >-
+          docker run --rm --platform linux/arm/v7
+          -v "$GITHUB_WORKSPACE:/work" -w /work node:20-bookworm-slim
+          node scripts/native-smoke.cjs --target linux-arm-gnueabihf
+      - name: Load addon and perform HTTP request on Linux RISC-V
+        if: matrix.target == 'linux-riscv64-gnu'
+        shell: bash
+        run: >-
+          docker run --rm --platform linux/riscv64
+          -v "$GITHUB_WORKSPACE:/work" -w /work debian:sid-slim
+          sh -euxc 'apt-get update; apt-get install --yes nodejs;
+          node scripts/native-smoke.cjs --target linux-riscv64-gnu'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.target }}
+          path: .artifacts/npm/*.tgz
+          if-no-files-found: error
+
+  android:
+    name: android-arm64 (experimental)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager --install "ndk;28.2.13676358"
+      - name: Configure Android NDK
+        shell: bash
+        run: echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> "$GITHUB_ENV"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/prepare-native.ts --target android-arm64
+      - run: pnpm exec tsx scripts/build-native-target.ts --target android-arm64
+      - run: pnpm exec tsx scripts/package-native.ts --target android-arm64
+      - run: pnpm exec tsx scripts/verify-linkage.ts --target android-arm64
+      - run: pnpm exec tsx scripts/pack-native.ts --target android-arm64
+      - name: Enable KVM for the Android emulator
+        shell: bash
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Load ARM64 addon and perform HTTP request in Android
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis_playstore
+          arch: x86_64
+          profile: pixel_7
+          script: pnpm smoke:android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: native-android-arm64
+          path: .artifacts/npm/*.tgz
+          if-no-files-found: error

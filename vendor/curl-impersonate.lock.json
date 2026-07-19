@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "repository": "https://github.com/lexiforest/curl-impersonate",
+  "tag": "v2.0.0rc4",
+  "commit": "99616c159d5a5efb8ee88335536106523fe455ce",
+  "releasedAt": "2026-07-19T14:56:20Z",
+  "curlCffiParity": {
+    "version": "0.15.0",
+    "checkedAt": "2026-07-20",
+    "source": "https://pypi.org/pypi/curl_cffi/0.15.0/json"
+  },
+  "artifacts": {
+    "darwin-x64": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.x86_64-macos.tar.gz",
+      "sha256": "0044f2469f87b411aa81a6fc2e936659479080011509adb751b170c015792beb"
+    },
+    "darwin-arm64": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.arm64-macos.tar.gz",
+      "sha256": "eb75320cd0c90eeebc80e2c625e67c3b6e4b03c5cbadcf844d8144f58e717b2e"
+    },
+    "win32-x64-msvc": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.x86_64-win32.tar.gz",
+      "sha256": "98686aff27d3fe93373aa554191e6c72b275d174ae0e1d915fbfa60d74a172af"
+    },
+    "win32-arm64-msvc": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.arm64-win32.tar.gz",
+      "sha256": "8cb9cf99b903079413a7b7ba9216a7e323053a9522a7746555063abce337576c"
+    },
+    "linux-x64-gnu": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.x86_64-linux-gnu.tar.gz",
+      "sha256": "53f79866cf970dda45d0649faa7523c3170ef8216b2e2377e13b830a74f78699"
+    },
+    "linux-arm64-gnu": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.aarch64-linux-gnu.tar.gz",
+      "sha256": "d9334fbca8e95aaec9a021da20db008bd579df42e8e169861c087f6b5a5e6438"
+    },
+    "linux-x64-musl": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.x86_64-linux-musl.tar.gz",
+      "sha256": "8656294274f9451aad8c50579dbb12cc3c3488ca669ab97a9cc707b2a2d521af"
+    },
+    "linux-arm64-musl": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.aarch64-linux-musl.tar.gz",
+      "sha256": "994d3315c0240fa4e1bacf54787f0bf355a062d7ee7162f71665e26fa7f49a8d"
+    },
+    "linux-ia32-gnu": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.i386-linux-gnu.tar.gz",
+      "sha256": "a8c7d6c10268988a0fb4d7a49d6573a90855e2daa25e42b20bddd73f6e74d016"
+    },
+    "linux-arm-gnueabihf": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.arm-linux-gnueabihf.tar.gz",
+      "sha256": "c13259b3f58628d6ace471899a7efc20934808381d8fd76c2d4e21b749723181"
+    },
+    "linux-riscv64-gnu": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.riscv64-linux-gnu.tar.gz",
+      "sha256": "26f418059777821c2bb39a5b1fb31cd57b65d42d27836e02a914411ea8f0a743"
+    },
+    "android-arm64": {
+      "asset": "libcurl-impersonate-v2.0.0rc4.aarch64-linux-android.tar.gz",
+      "sha256": "0560d01df8a1eb7400a70242184baf486b5151f57d2b34982364bb1beb456736"
+    }
+  }
+}
+

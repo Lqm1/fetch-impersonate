@@ -1,0 +1,10 @@
+{
+  "name": "@fetch-impersonate/native-android-arm64",
+  "version": "0.1.0",
+  "description": "Experimental native binding for fetch-impersonate on Android ARM64",
+  "license": "MIT",
+  "os": ["android"],
+  "cpu": ["arm64"],
+  "main": "fetch-impersonate.android-arm64.node",
+  "files": ["fetch-impersonate.android-arm64.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

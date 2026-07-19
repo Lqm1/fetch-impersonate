@@ -1,0 +1,68 @@
+name: Release npm packages
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-native:
+    uses: ./.github/workflows/build-native.yml
+
+  publish:
+    name: Publish native packages, then root package
+    needs: build-native
+    runs-on: ubuntu-24.04
+    environment: npm
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:package-metadata
+      - name: Verify tag and package versions match
+        if: github.ref_type == 'tag'
+        shell: bash
+        run: |
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          test "$GITHUB_REF_NAME" = "v$PACKAGE_VERSION"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: native-*
+          path: .artifacts/release-native
+          merge-multiple: true
+      - name: Verify all native tarballs are present
+        shell: bash
+        run: |
+          EXPECTED="$(node -e "const t=require('./native-targets.json'); console.log(Object.keys(t).filter(k => !k.startsWith('$')).length)")"
+          ACTUAL="$(find .artifacts/release-native -maxdepth 1 -name '*.tgz' -type f | wc -l)"
+          test "$ACTUAL" = "$EXPECTED"
+      - run: pnpm build
+      - name: Pack root package
+        shell: bash
+        run: |
+          mkdir -p .artifacts/release-root
+          npm pack --ignore-scripts --pack-destination .artifacts/release-root
+      - name: Publish platform packages
+        shell: bash
+        run: |
+          for package in .artifacts/release-native/*.tgz; do
+            npm publish "$package" --access public --provenance --ignore-scripts
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish root package last
+        shell: bash
+        run: npm publish .artifacts/release-root/*.tgz --access public --provenance --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

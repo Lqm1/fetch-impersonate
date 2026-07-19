@@ -1,0 +1,11 @@
+{
+  "name": "@fetch-impersonate/native-linux-arm-gnueabihf",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on Linux ARMv7 glibc",
+  "license": "MIT",
+  "os": ["linux"],
+  "cpu": ["arm"],
+  "libc": ["glibc"],
+  "main": "fetch-impersonate.linux-arm-gnueabihf.node",
+  "files": ["fetch-impersonate.linux-arm-gnueabihf.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

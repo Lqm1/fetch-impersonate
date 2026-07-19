@@ -1,0 +1,97 @@
+{
+  "$schema": "./schemas/native-targets.schema.json",
+  "darwin-x64": {
+    "rustTarget": "x86_64-apple-darwin",
+    "npmOs": "darwin",
+    "npmCpu": "x64",
+    "link": "static",
+    "assetPlatform": "x86_64-macos"
+  },
+  "darwin-arm64": {
+    "rustTarget": "aarch64-apple-darwin",
+    "npmOs": "darwin",
+    "npmCpu": "arm64",
+    "link": "static",
+    "assetPlatform": "arm64-macos"
+  },
+  "win32-x64-msvc": {
+    "rustTarget": "x86_64-pc-windows-msvc",
+    "npmOs": "win32",
+    "npmCpu": "x64",
+    "link": "dynamic",
+    "assetPlatform": "x86_64-win32"
+  },
+  "win32-arm64-msvc": {
+    "rustTarget": "aarch64-pc-windows-msvc",
+    "npmOs": "win32",
+    "npmCpu": "arm64",
+    "link": "dynamic",
+    "assetPlatform": "arm64-win32"
+  },
+  "linux-x64-gnu": {
+    "rustTarget": "x86_64-unknown-linux-gnu",
+    "npmOs": "linux",
+    "npmCpu": "x64",
+    "npmLibc": "glibc",
+    "link": "static",
+    "assetPlatform": "x86_64-linux-gnu"
+  },
+  "linux-arm64-gnu": {
+    "rustTarget": "aarch64-unknown-linux-gnu",
+    "npmOs": "linux",
+    "npmCpu": "arm64",
+    "npmLibc": "glibc",
+    "link": "static",
+    "assetPlatform": "aarch64-linux-gnu"
+  },
+  "linux-x64-musl": {
+    "rustTarget": "x86_64-unknown-linux-musl",
+    "npmOs": "linux",
+    "npmCpu": "x64",
+    "npmLibc": "musl",
+    "link": "static",
+    "assetPlatform": "x86_64-linux-musl"
+  },
+  "linux-arm64-musl": {
+    "rustTarget": "aarch64-unknown-linux-musl",
+    "npmOs": "linux",
+    "npmCpu": "arm64",
+    "npmLibc": "musl",
+    "link": "static",
+    "assetPlatform": "aarch64-linux-musl"
+  },
+  "linux-ia32-gnu": {
+    "rustTarget": "i686-unknown-linux-gnu",
+    "npmOs": "linux",
+    "npmCpu": "ia32",
+    "npmLibc": "glibc",
+    "link": "static",
+    "assetPlatform": "i386-linux-gnu"
+  },
+  "linux-arm-gnueabihf": {
+    "rustTarget": "armv7-unknown-linux-gnueabihf",
+    "npmOs": "linux",
+    "npmCpu": "arm",
+    "npmLibc": "glibc",
+    "link": "static",
+    "assetPlatform": "arm-linux-gnueabihf"
+  },
+  "linux-riscv64-gnu": {
+    "rustTarget": "riscv64gc-unknown-linux-gnu",
+    "npmOs": "linux",
+    "npmCpu": "riscv64",
+    "npmLibc": "glibc",
+    "link": "static",
+    "assetPlatform": "riscv64-linux-gnu"
+  },
+  "android-arm64": {
+    "rustTarget": "aarch64-linux-android",
+    "npmOs": "android",
+    "npmCpu": "arm64",
+    "npmLibc": "bionic",
+    "link": "static",
+    "assetPlatform": "aarch64-linux-android",
+    "experimental": true
+  }
+}
+

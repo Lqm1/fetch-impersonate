@@ -1,0 +1,11 @@
+{
+  "name": "@fetch-impersonate/native-linux-riscv64-gnu",
+  "version": "0.1.0",
+  "description": "Native binding for fetch-impersonate on Linux RISC-V 64 glibc",
+  "license": "MIT",
+  "os": ["linux"],
+  "cpu": ["riscv64"],
+  "libc": ["glibc"],
+  "main": "fetch-impersonate.linux-riscv64-gnu.node",
+  "files": ["fetch-impersonate.linux-riscv64-gnu.node", "README.md", "LICENSE", "THIRD_PARTY_NOTICES"]
+}

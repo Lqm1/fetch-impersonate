@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fetch-impersonate.dev/schemas/native-targets.schema.json",
+  "title": "fetch-impersonate native targets",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "patternProperties": {
+    "^(?!\\$schema$).+$": {
+      "$ref": "#/$defs/target"
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "target": {
+      "type": "object",
+      "required": [
+        "rustTarget",
+        "npmOs",
+        "npmCpu",
+        "link",
+        "assetPlatform"
+      ],
+      "properties": {
+        "rustTarget": { "type": "string", "minLength": 1 },
+        "npmOs": { "enum": ["android", "darwin", "linux", "win32"] },
+        "npmCpu": { "enum": ["arm", "arm64", "ia32", "riscv64", "x64"] },
+        "npmLibc": { "enum": ["bionic", "glibc", "musl"] },
+        "link": { "enum": ["dynamic", "static"] },
+        "assetPlatform": { "type": "string", "minLength": 1 },
+        "experimental": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

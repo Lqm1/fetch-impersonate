@@ -1,0 +1,89 @@
+{
+  "name": "fetch-impersonate",
+  "version": "0.1.0",
+  "description": "A Fetch API-compatible transport powered by libcurl-impersonate",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm run build:ts",
+    "build:ts": "tsc -p tsconfig.build.json",
+    "build:native": "napi build --platform --release --manifest-path crates/native/Cargo.toml --package-json-path package.json --output-dir crates/native",
+    "build:native:target": "tsx scripts/build-native-target.ts",
+    "package:native": "tsx scripts/package-native.ts",
+    "pack:native": "tsx scripts/pack-native.ts",
+    "verify:linkage": "tsx scripts/verify-linkage.ts",
+    "smoke:install": "tsx scripts/smoke-install.ts",
+    "smoke:native": "node scripts/native-smoke.cjs",
+    "smoke:android": "tsx scripts/android-emulator-smoke.ts",
+    "check:target-parity": "tsx scripts/check-target-parity.ts",
+    "check:package-metadata": "tsx scripts/check-package-metadata.ts",
+    "check:fingerprint": "tsx scripts/check-fingerprint.ts",
+    "generate:bindings": "tsx scripts/generate-bindings.ts",
+    "check:bindings": "tsx scripts/check-bindings.ts",
+    "check": "pnpm run typecheck && pnpm run test && pnpm run check:rust",
+    "check:rust": "cargo check -p fetch-impersonate-native --no-default-features --features native-stub",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepack": "pnpm run build:ts",
+    "prepublishOnly": "napi prepublish -t npm"
+  },
+  "napi": {
+    "binaryName": "fetch-impersonate",
+    "packageName": "fetch-impersonate",
+    "targets": [
+      "x86_64-pc-windows-msvc",
+      "aarch64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "aarch64-unknown-linux-gnu",
+      "x86_64-unknown-linux-musl",
+      "aarch64-unknown-linux-musl",
+      "i686-unknown-linux-gnu",
+      "armv7-unknown-linux-gnueabihf",
+      "riscv64gc-unknown-linux-gnu",
+      "aarch64-linux-android",
+      "x86_64-apple-darwin",
+      "aarch64-apple-darwin"
+    ]
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "3.7.3",
+    "@types/node": "26.1.1",
+    "axios": "1.18.1",
+    "ky": "2.0.2",
+    "tsx": "4.23.1",
+    "typescript": "7.0.2",
+    "vitest": "4.1.10"
+  },
+  "optionalDependencies": {
+    "@fetch-impersonate/native-darwin-x64": "0.1.0",
+    "@fetch-impersonate/native-darwin-arm64": "0.1.0",
+    "@fetch-impersonate/native-win32-x64-msvc": "0.1.0",
+    "@fetch-impersonate/native-win32-arm64-msvc": "0.1.0",
+    "@fetch-impersonate/native-linux-x64-gnu": "0.1.0",
+    "@fetch-impersonate/native-linux-arm64-gnu": "0.1.0",
+    "@fetch-impersonate/native-linux-x64-musl": "0.1.0",
+    "@fetch-impersonate/native-linux-arm64-musl": "0.1.0",
+    "@fetch-impersonate/native-linux-ia32-gnu": "0.1.0",
+    "@fetch-impersonate/native-linux-arm-gnueabihf": "0.1.0",
+    "@fetch-impersonate/native-linux-riscv64-gnu": "0.1.0",
+    "@fetch-impersonate/native-android-arm64": "0.1.0"
+  },
+  "packageManager": "pnpm@10.13.1"
+}

@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "termuxApp": {
+    "version": "0.118.3",
+    "file": "termux-app_v0.118.3+github-debug_universal.apk",
+    "url": "https://github.com/termux/termux-app/releases/download/v0.118.3/termux-app_v0.118.3%2Bgithub-debug_universal.apk",
+    "sha256": "7600078440c3c34ef050bc009b00fc3215cb87ec4a449e01a696f74cf4249db2"
+  },
+  "termuxPackages": [
+    {
+      "file": "nodejs-lts_24.17.0_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/n/nodejs-lts/nodejs-lts_24.17.0_aarch64.deb",
+      "sha256": "391428ee751dd1e960c8d3fbe02f7c2c18bb2b20a226d55ac920364e0bb51604"
+    },
+    {
+      "file": "libc++_29_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/libc/libc++/libc++_29_aarch64.deb",
+      "sha256": "bb9f12113c137aa0e8513bb51cc49fe77a5ce3ca39ab9e92c57d228ecdf00222"
+    },
+    {
+      "file": "openssl_1_3.6.3_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/o/openssl/openssl_1%3A3.6.3_aarch64.deb",
+      "sha256": "86760e9ce736f463236f2c15b1eb3a3fdcfc5778d0fd7077a917448dcc90f3aa"
+    },
+    {
+      "file": "c-ares_1.34.8_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/c/c-ares/c-ares_1.34.8_aarch64.deb",
+      "sha256": "7681fc23e822d7988ba8b2adf3468f93ae68f724dda365cff1385096a9fa87e6"
+    },
+    {
+      "file": "libicu_78.3_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/libi/libicu/libicu_78.3_aarch64.deb",
+      "sha256": "f536403f65a08fe0df6e7304184e902d54def77d5c3bd5edfd9109d57601d276"
+    },
+    {
+      "file": "libsqlite_3.53.3_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/libs/libsqlite/libsqlite_3.53.3_aarch64.deb",
+      "sha256": "147365c5633b571bea063ab6c27022577fca89d73e99a7607030602b0166eded"
+    },
+    {
+      "file": "zlib_1.3.2_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/z/zlib/zlib_1.3.2_aarch64.deb",
+      "sha256": "75e7d0af17fcc3b40004309fdc00a1ddb9ae08346dce5e269902c34ac3966ac9"
+    },
+    {
+      "file": "ca-certificates_1_2026.05.14_all.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/c/ca-certificates/ca-certificates_1%3A2026.05.14_all.deb",
+      "sha256": "bd33b67306070679387e3b999590a0645eccce195017e1e10b76df9dd0c81d1d"
+    },
+    {
+      "file": "resolv-conf_1.3_aarch64.deb",
+      "url": "https://packages.termux.dev/apt/termux-main/pool/main/r/resolv-conf/resolv-conf_1.3_aarch64.deb",
+      "sha256": "ab541abac8e0c81709cd7ca4a02bcfa0d60ba1f4bfe7fd6dce4a694a4a9dfffa"
+    }
+  ]
+}
