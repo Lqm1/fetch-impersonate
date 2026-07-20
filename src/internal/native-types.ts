@@ -40,13 +40,7 @@ export interface NativeCompleteEvent {
 }
 
 export interface NativeErrorInfo {
-  kind:
-    | "invalidArgument"
-    | "curlEasy"
-    | "curlMulti"
-    | "fetch"
-    | "cancelled"
-    | "internal";
+  kind: "invalidArgument" | "curlEasy" | "curlMulti" | "fetch" | "cancelled" | "internal";
   message: string;
   code?: string;
   curlCode?: number;

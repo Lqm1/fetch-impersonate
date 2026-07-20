@@ -53,9 +53,7 @@ const actualDirectories = new Set(
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name),
 );
-const expectedDirectories = new Set(
-  Object.keys(targets).map((target) => `native-${target}`),
-);
+const expectedDirectories = new Set(Object.keys(targets).map((target) => `native-${target}`));
 assertSetEqual(actualDirectories, expectedDirectories, "npm package directories");
 
 for (const [target, config] of Object.entries(targets)) {
@@ -83,19 +81,13 @@ for (const [target, config] of Object.entries(targets)) {
   assertSetEqual(new Set(packageJson.cpu ?? []), new Set([config.npmCpu]), `${target} cpu`);
   assertSetEqual(
     new Set(packageJson.libc ?? []),
-    new Set(
-      config.npmOs === "linux" && config.npmLibc !== undefined
-        ? [config.npmLibc]
-        : [],
-    ),
+    new Set(config.npmOs === "linux" && config.npmLibc !== undefined ? [config.npmLibc] : []),
     `${target} libc`,
   );
   assertSetEqual(new Set(packageJson.files ?? []), expectedFiles, `${target} files`);
 }
 
-console.log(
-  `Package metadata verified for ${Object.keys(targets).length} native targets.`,
-);
+console.log(`Package metadata verified for ${Object.keys(targets).length} native targets.`);
 
 async function readPackage(path: string): Promise<PackageJson> {
   return JSON.parse(await readFile(path, "utf8")) as PackageJson;
@@ -106,18 +98,14 @@ function assertRecordEqual(
   expected: Record<string, string>,
   label: string,
 ): void {
-  const actualEntries = Object.entries(actual).sort();
-  const expectedEntries = Object.entries(expected).sort();
+  const actualEntries = Object.entries(actual).toSorted((a, b) => a[0].localeCompare(b[0]));
+  const expectedEntries = Object.entries(expected).toSorted((a, b) => a[0].localeCompare(b[0]));
   if (JSON.stringify(actualEntries) !== JSON.stringify(expectedEntries)) {
     throw new Error(`${label} does not match native-targets.json`);
   }
 }
 
-function assertSetEqual(
-  actual: Set<string>,
-  expected: Set<string>,
-  label: string,
-): void {
+function assertSetEqual(actual: Set<string>, expected: Set<string>, label: string): void {
   const missing = [...expected].filter((value) => !actual.has(value));
   const extra = [...actual].filter((value) => !expected.has(value));
   if (missing.length > 0 || extra.length > 0) {

@@ -2,8 +2,8 @@ import { createHash } from "node:crypto";
 
 import { fetch } from "../src/index.js";
 
-const endpoint = process.env.FETCH_IMPERSONATE_FINGERPRINT_URL
-  ?? "https://tls.browserleaks.com/json";
+const endpoint =
+  process.env.FETCH_IMPERSONATE_FINGERPRINT_URL ?? "https://tls.browserleaks.com/json";
 const ja3 = [
   "771",
   "4865-4866-4867-49195-49196-52393-49199-49200-52392-49171-49172-156-157-47-53",
@@ -17,7 +17,7 @@ if (!response.ok) {
   throw new Error(`fingerprint endpoint returned HTTP ${response.status}`);
 }
 
-const payload = await response.json() as Record<string, unknown>;
+const payload = (await response.json()) as Record<string, unknown>;
 const reportedHash = payload.ja3_hash;
 if (typeof reportedHash !== "string") {
   throw new TypeError("fingerprint endpoint response has no ja3_hash string");
@@ -30,8 +30,10 @@ if (reportedHash !== expectedHash) {
   );
 }
 
-console.log(JSON.stringify({
-  endpoint,
-  httpVersion: payload.http_version,
-  ja3Hash: reportedHash,
-}));
+console.log(
+  JSON.stringify({
+    endpoint,
+    httpVersion: payload.http_version,
+    ja3Hash: reportedHash,
+  }),
+);

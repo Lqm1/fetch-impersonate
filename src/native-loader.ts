@@ -11,10 +11,7 @@ import type {
 } from "./internal/native-types.js";
 
 interface RawNativeBinding {
-  startRequest(
-    request: NativeRequest,
-    listener: (serializedEvent: string) => void,
-  ): bigint;
+  startRequest(request: NativeRequest, listener: (serializedEvent: string) => void): bigint;
   readBody(transferId: bigint): Uint8Array | null;
   cancelRequest(transferId: bigint): void;
   version(): NativeVersionInfo;
@@ -30,9 +27,7 @@ export function getNativeBinding(): NativeBinding {
   return cachedBinding;
 }
 
-export function setNativeBindingForTesting(
-  binding: NativeBinding | undefined,
-): void {
+export function setNativeBindingForTesting(binding: NativeBinding | undefined): void {
   cachedBinding = binding;
 }
 
@@ -42,13 +37,7 @@ function loadNativeBinding(): NativeBinding {
   const localCandidates = [
     join(moduleDirectory, `fetch-impersonate.${target}.node`),
     join(moduleDirectory, "..", `fetch-impersonate.${target}.node`),
-    join(
-      moduleDirectory,
-      "..",
-      "crates",
-      "native",
-      `fetch-impersonate.${target}.node`,
-    ),
+    join(moduleDirectory, "..", "crates", "native", `fetch-impersonate.${target}.node`),
   ];
   const errors: unknown[] = [];
 

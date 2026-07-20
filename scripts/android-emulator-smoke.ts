@@ -1,14 +1,6 @@
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import {
-  copyFile,
-  lstat,
-  mkdir,
-  readFile,
-  readdir,
-  rm,
-  writeFile,
-} from "node:fs/promises";
+import { copyFile, lstat, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 
 interface LockedDownload {
@@ -30,12 +22,7 @@ const work = join(root, ".artifacts", "android-emulator-smoke");
 const downloads = join(work, "downloads");
 const extracted = join(work, "root");
 const bundle = join(work, "a64.tar");
-const addon = join(
-  root,
-  "crates",
-  "native",
-  "fetch-impersonate.android-arm64.node",
-);
+const addon = join(root, "crates", "native", "fetch-impersonate.android-arm64.node");
 
 await rm(work, { recursive: true, force: true });
 await mkdir(downloads, { recursive: true });
@@ -56,14 +43,7 @@ for (const packageDownload of lock.termuxPackages) {
   run("dpkg-deb", ["-x", archive, extracted]);
 }
 
-const prefix = join(
-  extracted,
-  "data",
-  "data",
-  "com.termux",
-  "files",
-  "usr",
-);
+const prefix = join(extracted, "data", "data", "com.termux", "files", "usr");
 await replacePrefix(prefix);
 
 const smokeRoot = join(prefix, "smoke");
@@ -78,10 +58,7 @@ await copyFile(
   join(root, "npm", "native-android-arm64", "package.json"),
   join(nativePackage, "package.json"),
 );
-await copyFile(
-  addon,
-  join(nativePackage, "fetch-impersonate.android-arm64.node"),
-);
+await copyFile(addon, join(nativePackage, "fetch-impersonate.android-arm64.node"));
 
 run("tar", ["-cf", bundle, "-C", prefix, "."]);
 run("adb", ["push", bundle, "/data/local/tmp/fetch-impersonate-a64.tar"]);
@@ -116,10 +93,7 @@ async function downloadLocked(download: LockedDownload): Promise<string> {
 async function waitForTermuxBootstrap(): Promise<void> {
   const deadline = Date.now() + 240_000;
   while (Date.now() < deadline) {
-    const result = spawnSync("adb", [
-      "shell",
-      "run-as com.termux test -x files/usr/bin/bash",
-    ]);
+    const result = spawnSync("adb", ["shell", "run-as com.termux test -x files/usr/bin/bash"]);
     if (result.status === 0) return;
     await new Promise((resolveWait) => setTimeout(resolveWait, 2_000));
   }
