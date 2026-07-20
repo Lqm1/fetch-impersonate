@@ -76,9 +76,7 @@ export interface ImpersonateOptions {
   extraFp?: ExtraFingerprintOptions;
 }
 
-export interface ImpersonateRequestInit
-  extends RequestInit,
-    ImpersonateOptions {}
+export interface ImpersonateRequestInit extends RequestInit, ImpersonateOptions {}
 
 export type ImpersonateFetch = (
   input: string | URL | Request,

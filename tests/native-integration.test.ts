@@ -8,9 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import { createFetch, fetch } from "../src/index.js";
 
-const nativePath = resolve(
-  `crates/native/fetch-impersonate.${currentNativeTarget()}.node`,
-);
+const nativePath = resolve(`crates/native/fetch-impersonate.${currentNativeTarget()}.node`);
 const describeNative = existsSync(nativePath) ? describe : describe.skip;
 
 describeNative("native integration", () => {
@@ -41,11 +39,13 @@ describeNative("native integration", () => {
           request.on("data", (chunk: Buffer) => chunks.push(chunk));
           request.on("end", () => {
             response.setHeader("content-type", "application/json");
-            response.end(JSON.stringify({
-              body: Buffer.concat(chunks).toString("utf8"),
-              headers: request.headers,
-              method: request.method,
-            }));
+            response.end(
+              JSON.stringify({
+                body: Buffer.concat(chunks).toString("utf8"),
+                headers: request.headers,
+                method: request.method,
+              }),
+            );
           });
           break;
         }
@@ -54,10 +54,12 @@ describeNative("native integration", () => {
           request.on("data", (chunk: Buffer) => chunks.push(chunk));
           request.on("end", () => {
             response.setHeader("content-type", "application/json");
-            response.end(JSON.stringify({
-              body: Buffer.concat(chunks).toString("utf8"),
-              method: request.method,
-            }));
+            response.end(
+              JSON.stringify({
+                body: Buffer.concat(chunks).toString("utf8"),
+                method: request.method,
+              }),
+            );
           });
           break;
         }
@@ -225,7 +227,7 @@ describeNative("native integration", () => {
         method: "POST",
         body: testCase.body,
       });
-      const payload = await response.json() as {
+      const payload = (await response.json()) as {
         body: string;
         headers: Record<string, string>;
       };
@@ -239,7 +241,7 @@ describeNative("native integration", () => {
     form.set("field", "form-value");
     form.set("file", new Blob(["file-value"], { type: "text/plain" }), "sample.txt");
     const response = await fetch(`${origin}/echo`, { method: "POST", body: form });
-    const payload = await response.json() as {
+    const payload = (await response.json()) as {
       body: string;
       headers: Record<string, string>;
     };
@@ -325,7 +327,7 @@ describeNative("native integration", () => {
       impersonate: "chrome",
       defaultHeaders: true,
     });
-    const payload = await response.json() as { headers: Record<string, string> };
+    const payload = (await response.json()) as { headers: Record<string, string> };
     expect(payload.headers["user-agent"]).toContain("Chrome/");
   });
 
@@ -399,10 +401,7 @@ describeNative("native integration", () => {
         tlsGrease: false,
         tlsPermuteExtensions: false,
         tlsCertCompression: "brotli",
-        tlsSignatureAlgorithms: [
-          "ecdsa_secp256r1_sha256",
-          "rsa_pss_rsae_sha256",
-        ],
+        tlsSignatureAlgorithms: ["ecdsa_secp256r1_sha256", "rsa_pss_rsae_sha256"],
         http2StreamWeight: 256,
         http2StreamExclusive: true,
       },
@@ -417,9 +416,11 @@ describeNative("native integration", () => {
     await expect(fetch(`${origin}/`, { akamai: "not-akamai" })).rejects.toThrow(
       "akamai must contain exactly four",
     );
-    await expect(fetch(`${origin}/`, {
-      extraFp: { http2StreamWeight: 0 },
-    })).rejects.toThrow("http2StreamWeight must be between 1 and 256");
+    await expect(
+      fetch(`${origin}/`, {
+        extraFp: { http2StreamWeight: 0 },
+      }),
+    ).rejects.toThrow("http2StreamWeight must be between 1 and 256");
   });
 
   it("does not retain cookies between transfers", async () => {
@@ -509,6 +510,6 @@ function currentNativeTarget(): string {
 
 function closeServer(server: Server): Promise<void> {
   return new Promise((resolveClose, rejectClose) => {
-    server.close((error) => error === undefined ? resolveClose() : rejectClose(error));
+    server.close((error) => (error === undefined ? resolveClose() : rejectClose(error)));
   });
 }

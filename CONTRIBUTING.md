@@ -19,16 +19,16 @@ Thank you for your interest in contributing! This document explains how to set u
 
 fetch-impersonate is a hybrid TypeScript / Rust project:
 
-| Path | Purpose |
-| --- | --- |
-| `src/` | Public TypeScript API (`fetch`, `createFetch`) and internal request/response normalization |
-| `crates/native/` | Rust Node-API addon wrapping libcurl-impersonate |
-| `scripts/` | Build, packaging, verification, and smoke-test tooling (run with `tsx`) |
-| `npm/` | Per-platform native package templates |
-| `native-targets.json` | **Source of truth** for Rust targets, npm platform metadata, and linkage policy |
-| `vendor/curl-impersonate.lock.json` | Pinned curl-impersonate release, commit, and per-asset SHA-256 hashes |
-| `tests/` | Vitest suites: `public-api.test.ts` (no native binary needed) and `native-integration.test.ts` |
-| `schemas/` | JSON schemas for repository metadata files |
+| Path                                | Purpose                                                                                        |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/`                              | Public TypeScript API (`fetch`, `createFetch`) and internal request/response normalization     |
+| `crates/native/`                    | Rust Node-API addon wrapping libcurl-impersonate                                               |
+| `scripts/`                          | Build, packaging, verification, and smoke-test tooling (run with `tsx`)                        |
+| `npm/`                              | Per-platform native package templates                                                          |
+| `native-targets.json`               | **Source of truth** for Rust targets, npm platform metadata, and linkage policy                |
+| `vendor/curl-impersonate.lock.json` | Pinned curl-impersonate release, commit, and per-asset SHA-256 hashes                          |
+| `tests/`                            | Vitest suites: `public-api.test.ts` (no native binary needed) and `native-integration.test.ts` |
+| `schemas/`                          | JSON schemas for repository metadata files                                                     |
 
 The TypeScript layer never falls back to system curl: native assets are selected only from the installed platform-specific optional dependency.
 

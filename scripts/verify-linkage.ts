@@ -10,18 +10,14 @@ interface NativeTarget {
 
 const root = resolve(import.meta.dirname, "..");
 const target = readTargetArgument() ?? detectTarget();
-const targets = JSON.parse(
-  await readFile(join(root, "native-targets.json"), "utf8"),
-) as Record<string, NativeTarget>;
+const targets = JSON.parse(await readFile(join(root, "native-targets.json"), "utf8")) as Record<
+  string,
+  NativeTarget
+>;
 const config = targets[target];
 if (config === undefined) throw new Error(`Unknown native target: ${target}`);
 
-const binary = join(
-  root,
-  "crates",
-  "native",
-  `fetch-impersonate.${target}.node`,
-);
+const binary = join(root, "crates", "native", `fetch-impersonate.${target}.node`);
 if (!existsSync(binary)) throw new Error(`Native binary is missing: ${binary}`);
 
 const dependencies = inspectDependencies(binary, config.npmOs).toLowerCase();
@@ -70,20 +66,27 @@ function inspectDependencies(binary: string, os: string): string {
 }
 
 function findAndroidReadelf(): string | undefined {
-  const roots = [process.env.ANDROID_NDK_HOME, process.env.ANDROID_NDK_ROOT]
-    .filter((value): value is string => value !== undefined);
+  const roots = [process.env.ANDROID_NDK_HOME, process.env.ANDROID_NDK_ROOT].filter(
+    (value): value is string => value !== undefined,
+  );
   const androidHome = process.env.ANDROID_HOME;
   if (androidHome !== undefined) {
     const ndkRoot = join(androidHome, "ndk");
     if (existsSync(ndkRoot)) {
-      roots.push(...readdirSync(ndkRoot).sort().reverse().map((name) => join(ndkRoot, name)));
+      roots.push(
+        ...readdirSync(ndkRoot)
+          .toSorted()
+          .toReversed()
+          .map((name) => join(ndkRoot, name)),
+      );
     }
   }
-  const prebuilt = process.platform === "win32"
-    ? "windows-x86_64"
-    : process.platform === "darwin"
-      ? "darwin-x86_64"
-      : "linux-x86_64";
+  const prebuilt =
+    process.platform === "win32"
+      ? "windows-x86_64"
+      : process.platform === "darwin"
+        ? "darwin-x86_64"
+        : "linux-x86_64";
   const executable = process.platform === "win32" ? "llvm-readelf.exe" : "llvm-readelf";
   return roots
     .map((root) => join(root, "toolchains", "llvm", "prebuilt", prebuilt, "bin", executable))
@@ -93,25 +96,22 @@ function findAndroidReadelf(): string | undefined {
 function findDumpbin(): string | undefined {
   const installer = process.env["ProgramFiles(x86)"];
   if (installer === undefined) return undefined;
-  const vswhere = join(
-    installer,
-    "Microsoft Visual Studio",
-    "Installer",
-    "vswhere.exe",
-  );
+  const vswhere = join(installer, "Microsoft Visual Studio", "Installer", "vswhere.exe");
   if (!existsSync(vswhere)) return undefined;
-  const result = spawnSync(vswhere, [
-    "-latest",
-    "-products",
-    "*",
-    "-requires",
-    "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
-    "-find",
-    "VC\\Tools\\MSVC\\**\\bin\\Hostx64\\x64\\dumpbin.exe",
-  ], { encoding: "utf8" });
-  return result.status === 0
-    ? result.stdout.trim().split(/\r?\n/).find(Boolean)
-    : undefined;
+  const result = spawnSync(
+    vswhere,
+    [
+      "-latest",
+      "-products",
+      "*",
+      "-requires",
+      "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+      "-find",
+      "VC\\Tools\\MSVC\\**\\bin\\Hostx64\\x64\\dumpbin.exe",
+    ],
+    { encoding: "utf8" },
+  );
+  return result.status === 0 ? result.stdout.trim().split(/\r?\n/).find(Boolean) : undefined;
 }
 
 function runFirst(commands: ReadonlyArray<readonly [string, readonly string[]]>): string {

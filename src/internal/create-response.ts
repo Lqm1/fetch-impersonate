@@ -26,16 +26,8 @@ export function createResponse(
   return response;
 }
 
-export function responseMustNotHaveBody(
-  requestMethod: string,
-  status: number,
-): boolean {
+export function responseMustNotHaveBody(requestMethod: string, status: number): boolean {
   return (
-    requestMethod === "HEAD" ||
-    status === 101 ||
-    status === 204 ||
-    status === 205 ||
-    status === 304
+    requestMethod === "HEAD" || status === 101 || status === 204 || status === 205 || status === 304
   );
 }
-

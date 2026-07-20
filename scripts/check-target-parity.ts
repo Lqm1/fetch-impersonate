@@ -19,9 +19,10 @@ const root = resolve(import.meta.dirname, "..");
 const lock = JSON.parse(
   await readFile(join(root, "vendor", "curl-impersonate.lock.json"), "utf8"),
 ) as CurlLock;
-const targets = JSON.parse(
-  await readFile(join(root, "native-targets.json"), "utf8"),
-) as Record<string, unknown>;
+const targets = JSON.parse(await readFile(join(root, "native-targets.json"), "utf8")) as Record<
+  string,
+  unknown
+>;
 const response = await fetch(lock.curlCffiParity.source);
 
 if (!response.ok) {
@@ -35,9 +36,7 @@ const wheelTargets = new Set(
     .map(({ filename }) => targetFromWheel(filename))
     .filter((target): target is string => target !== undefined),
 );
-const configuredTargets = new Set(
-  Object.keys(targets).filter((target) => !target.startsWith("$")),
-);
+const configuredTargets = new Set(Object.keys(targets).filter((target) => !target.startsWith("$")));
 const missing = [...wheelTargets].filter((target) => !configuredTargets.has(target));
 const extra = [...configuredTargets].filter((target) => !wheelTargets.has(target));
 

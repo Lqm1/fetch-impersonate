@@ -16,9 +16,10 @@ interface PackageJson {
 
 const root = resolve(import.meta.dirname, "..");
 const target = readTargetArgument() ?? detectTarget();
-const targets = JSON.parse(
-  await readFile(join(root, "native-targets.json"), "utf8"),
-) as Record<string, NativeTarget>;
+const targets = JSON.parse(await readFile(join(root, "native-targets.json"), "utf8")) as Record<
+  string,
+  NativeTarget
+>;
 const targetConfig = targets[target];
 if (targetConfig === undefined) {
   throw new Error(`Unknown native target: ${target}`);
@@ -27,9 +28,7 @@ if (targetConfig === undefined) {
 const lock = JSON.parse(
   await readFile(join(root, "vendor", "curl-impersonate.lock.json"), "utf8"),
 ) as CurlLock;
-const rootPackage = JSON.parse(
-  await readFile(join(root, "package.json"), "utf8"),
-) as PackageJson;
+const rootPackage = JSON.parse(await readFile(join(root, "package.json"), "utf8")) as PackageJson;
 const packageDirectory = join(root, "npm", `native-${target}`);
 const nativePackage = JSON.parse(
   await readFile(join(packageDirectory, "package.json"), "utf8"),
@@ -58,15 +57,7 @@ await writeFile(
 
 if (targetConfig.link === "dynamic") {
   await copyFile(
-    join(
-      root,
-      "vendor",
-      "artifacts",
-      target,
-      lock.tag,
-      "lib",
-      "libcurl-impersonate.dll",
-    ),
+    join(root, "vendor", "artifacts", target, lock.tag, "lib", "libcurl-impersonate.dll"),
     join(packageDirectory, "libcurl-impersonate.dll"),
   );
 }

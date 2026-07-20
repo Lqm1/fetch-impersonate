@@ -1,7 +1,4 @@
-import type {
-  ImpersonateOptions,
-  ImpersonateRequestInit,
-} from "../options.js";
+import type { ImpersonateOptions, ImpersonateRequestInit } from "../options.js";
 
 const impersonateOptionKeys = [
   "impersonate",
@@ -60,9 +57,7 @@ export function extractImpersonateOptions(
   return validateImpersonateOptions(options);
 }
 
-export function extractStandardRequestInit(
-  init: ImpersonateRequestInit | undefined,
-): RequestInit {
+export function extractStandardRequestInit(init: ImpersonateRequestInit | undefined): RequestInit {
   if (init === undefined) {
     return {};
   }
@@ -76,7 +71,7 @@ export function extractStandardRequestInit(
     }
   }
 
-  return requestInit as RequestInitWithDuplex;
+  return requestInit;
 }
 
 export function mergeImpersonateOptions(
@@ -86,9 +81,7 @@ export function mergeImpersonateOptions(
   return validateImpersonateOptions({ ...defaults, ...overrides });
 }
 
-function validateImpersonateOptions(
-  options: ImpersonateOptions,
-): ImpersonateOptions {
+function validateImpersonateOptions(options: ImpersonateOptions): ImpersonateOptions {
   validateOptionalString(options.impersonate, "impersonate");
   validateOptionalBoolean(options.defaultHeaders, "defaultHeaders");
   validateOptionalString(options.proxy, "proxy");
@@ -101,9 +94,7 @@ function validateImpersonateOptions(
     options.httpVersion !== undefined &&
     !["auto", "1.1", "2", "3"].includes(options.httpVersion)
   ) {
-    throw new TypeError(
-      'httpVersion must be one of "auto", "1.1", "2", or "3"',
-    );
+    throw new TypeError('httpVersion must be one of "auto", "1.1", "2", or "3"');
   }
 
   if (
@@ -116,10 +107,7 @@ function validateImpersonateOptions(
   return { ...options };
 }
 
-function validateOptionalString(
-  value: unknown,
-  name: string,
-): asserts value is string | undefined {
+function validateOptionalString(value: unknown, name: string): asserts value is string | undefined {
   if (value !== undefined && typeof value !== "string") {
     throw new TypeError(`${name} must be a string`);
   }
@@ -135,11 +123,7 @@ function validateOptionalBoolean(
 }
 
 function validateOptionalTimeout(value: unknown, name: string): void {
-  if (
-    value !== undefined &&
-    (typeof value !== "number" || !Number.isFinite(value) || value < 0)
-  ) {
+  if (value !== undefined && (typeof value !== "number" || !Number.isFinite(value) || value < 0)) {
     throw new TypeError(`${name} must be a finite, non-negative number`);
   }
 }
-

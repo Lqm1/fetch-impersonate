@@ -14,9 +14,10 @@ interface PackResult {
 const root = resolve(import.meta.dirname, "..");
 const target = readArgument("--target") ?? detectTarget();
 const output = resolve(root, readArgument("--output") ?? ".artifacts/npm");
-const targets = JSON.parse(
-  await readFile(join(root, "native-targets.json"), "utf8"),
-) as Record<string, NativeTarget>;
+const targets = JSON.parse(await readFile(join(root, "native-targets.json"), "utf8")) as Record<
+  string,
+  NativeTarget
+>;
 if (targets[target] === undefined) throw new Error(`Unknown native target: ${target}`);
 
 await mkdir(output, { recursive: true });
@@ -29,12 +30,10 @@ const npmArguments = [
   join(root, "npm", `native-${target}`),
 ];
 const executable = process.platform === "win32" ? process.execPath : "npm";
-const argumentsForExecutable = process.platform === "win32"
-  ? [
-      join(dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js"),
-      ...npmArguments,
-    ]
-  : npmArguments;
+const argumentsForExecutable =
+  process.platform === "win32"
+    ? [join(dirname(process.execPath), "node_modules", "npm", "bin", "npm-cli.js"), ...npmArguments]
+    : npmArguments;
 const result = spawnSync(executable, argumentsForExecutable, {
   cwd: root,
   encoding: "utf8",

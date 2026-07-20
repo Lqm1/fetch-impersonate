@@ -1,15 +1,7 @@
-import type {
-  ImpersonateFetch,
-  ImpersonateOptions,
-  ImpersonateRequestInit,
-} from "./options.js";
+import type { ImpersonateFetch, ImpersonateOptions, ImpersonateRequestInit } from "./options.js";
 import { createResponse, responseMustNotHaveBody } from "./internal/create-response.js";
 import { getAbortReason, mapNativeError } from "./internal/map-error.js";
-import type {
-  NativeBinding,
-  NativeEvent,
-  NativeHeadersEvent,
-} from "./internal/native-types.js";
+import type { NativeBinding, NativeEvent, NativeHeadersEvent } from "./internal/native-types.js";
 import {
   extractImpersonateOptions,
   extractStandardRequestInit,
@@ -18,18 +10,14 @@ import {
 import { normalizeRequest } from "./internal/normalize-request.js";
 import { getNativeBinding } from "./native-loader.js";
 
-export const fetch: ImpersonateFetch = (input, init) =>
-  fetchWithDefaults(input, init, {});
+export const fetch: ImpersonateFetch = (input, init) => fetchWithDefaults(input, init, {});
 
 export async function fetchWithDefaults(
   input: string | URL | Request,
   init: ImpersonateRequestInit | undefined,
   defaults: ImpersonateOptions,
 ): Promise<Response> {
-  const options = mergeImpersonateOptions(
-    defaults,
-    extractImpersonateOptions(init),
-  );
+  const options = mergeImpersonateOptions(defaults, extractImpersonateOptions(init));
   const request = new Request(input, extractStandardRequestInit(init));
   const signal = request.signal;
 

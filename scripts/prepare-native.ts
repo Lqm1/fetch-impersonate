@@ -1,13 +1,6 @@
 import { createHash } from "node:crypto";
 import { createWriteStream } from "node:fs";
-import {
-  access,
-  mkdir,
-  mkdtemp,
-  readFile,
-  rename,
-  stat,
-} from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, rename, stat } from "node:fs/promises";
 import { basename, join, resolve } from "node:path";
 import { Readable } from "node:stream";
 import { finished } from "node:stream/promises";
@@ -44,9 +37,7 @@ if (await pathExists(marker)) {
 }
 
 if (await pathExists(destination)) {
-  throw new Error(
-    `Refusing to overwrite incomplete artifact directory: ${destination}`,
-  );
+  throw new Error(`Refusing to overwrite incomplete artifact directory: ${destination}`);
 }
 
 const downloadDirectory = join(root, "vendor", "artifacts", ".downloads");
@@ -75,9 +66,7 @@ if (digest !== artifact.sha256) {
   );
 }
 
-const extractionRoot = await mkdtemp(
-  join(root, "vendor", "artifacts", ".extract-"),
-);
+const extractionRoot = await mkdtemp(join(root, "vendor", "artifacts", ".extract-"));
 const extraction = spawnSync("tar", ["-xzf", archive, "-C", extractionRoot], {
   encoding: "utf8",
 });

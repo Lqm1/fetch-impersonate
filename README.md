@@ -45,13 +45,13 @@ The arguments and result follow the standard Fetch API. These transport options 
 ```ts
 interface ImpersonateOptions {
   impersonate?: ImpersonateTarget; // e.g. "chrome", "firefox", "safari_ios", "chrome145"
-  defaultHeaders?: boolean;        // send the browser's default headers (default: true when impersonating)
-  proxy?: string;                  // e.g. "http://user:pass@host:port"
-  timeout?: number;                // total request timeout, milliseconds
-  connectTimeout?: number;         // connection timeout, milliseconds
+  defaultHeaders?: boolean; // send the browser's default headers (default: true when impersonating)
+  proxy?: string; // e.g. "http://user:pass@host:port"
+  timeout?: number; // total request timeout, milliseconds
+  connectTimeout?: number; // connection timeout, milliseconds
   httpVersion?: "auto" | "1.1" | "2" | "3";
-  ja3?: string;                    // custom JA3 TLS fingerprint string
-  akamai?: string;                 // custom Akamai HTTP/2 fingerprint string
+  ja3?: string; // custom JA3 TLS fingerprint string
+  akamai?: string; // custom Akamai HTTP/2 fingerprint string
   extraFp?: ExtraFingerprintOptions;
 }
 ```
@@ -80,13 +80,13 @@ await browserFetch("https://example.com", { impersonate: "firefox" });
 
 Generic aliases track the newest supported browser version, and pinned targets select a specific one:
 
-| Alias | Pinned examples |
-| --- | --- |
-| `chrome`, `chrome_android` | `chrome99` … `chrome146`, `chrome131_android` |
-| `firefox` | `firefox133` … `firefox147` |
-| `safari`, `safari_ios`, `safari_beta` | `safari153` … `safari2601`, `safari184_ios` |
-| `edge` | `edge99`, `edge101` |
-| `tor` | `tor145` |
+| Alias                                 | Pinned examples                               |
+| ------------------------------------- | --------------------------------------------- |
+| `chrome`, `chrome_android`            | `chrome99` … `chrome146`, `chrome131_android` |
+| `firefox`                             | `firefox133` … `firefox147`                   |
+| `safari`, `safari_ios`, `safari_beta` | `safari153` … `safari2601`, `safari184_ios`   |
+| `edge`                                | `edge99`, `edge101`                           |
+| `tor`                                 | `tor145`                                      |
 
 The full list is in the [`ImpersonateTarget`](src/options.ts) type.
 
@@ -148,14 +148,14 @@ import type {
 
 The root package has exact-version optional dependencies on one native package per target:
 
-| Target | Linkage | Status |
-| --- | --- | --- |
-| macOS x64 / ARM64 | static curl stack | supported |
-| Windows x64 / ARM64 | bundled curl DLL | supported |
-| Linux glibc x64 / ARM64 | static curl stack | supported |
-| Linux musl x64 / ARM64 | static curl stack | supported |
-| Linux glibc i686 / ARMv7 / RISC-V 64 | static curl stack | supported |
-| Android ARM64 | static curl stack | experimental |
+| Target                               | Linkage           | Status       |
+| ------------------------------------ | ----------------- | ------------ |
+| macOS x64 / ARM64                    | static curl stack | supported    |
+| Windows x64 / ARM64                  | bundled curl DLL  | supported    |
+| Linux glibc x64 / ARM64              | static curl stack | supported    |
+| Linux musl x64 / ARM64               | static curl stack | supported    |
+| Linux glibc i686 / ARMv7 / RISC-V 64 | static curl stack | supported    |
+| Android ARM64                        | static curl stack | experimental |
 
 [`native-targets.json`](native-targets.json) is the source of truth for Rust targets, npm platform metadata, package names, and linkage policy. CI loads every supported `.node` file and performs an HTTP request on its native runner or under QEMU; the Android job additionally loads the ARM64 addon in an Android emulator through an ARM64 Node runtime.
 

@@ -1,9 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 
-import defaultFetch, {
-  createFetch,
-  fetch as namedFetch,
-} from "../src/index.js";
+import defaultFetch, { createFetch, fetch as namedFetch } from "../src/index.js";
 import * as publicApi from "../src/index.js";
 import { setNativeBindingForTesting } from "../src/native-loader.js";
 import { FakeNativeBinding } from "./helpers/fake-native-binding.js";
@@ -15,11 +12,7 @@ afterEach(() => {
 describe("public API", () => {
   it("exports only fetch and createFetch at runtime", () => {
     expect(defaultFetch).toBe(namedFetch);
-    expect(Object.keys(publicApi).sort()).toEqual([
-      "createFetch",
-      "default",
-      "fetch",
-    ]);
+    expect(Object.keys(publicApi).toSorted()).toEqual(["createFetch", "default", "fetch"]);
   });
 
   it("returns a standard Response for HTTP error statuses", async () => {
@@ -73,9 +66,7 @@ describe("public API", () => {
     }));
     setNativeBindingForTesting(native);
 
-    const error = await namedFetch("https://example.invalid").catch(
-      (reason: unknown) => reason,
-    );
+    const error = await namedFetch("https://example.invalid").catch((reason: unknown) => reason);
 
     expect(error).toBeInstanceOf(TypeError);
     expect((error as Error).message).toBe("fetch failed");
@@ -93,9 +84,9 @@ describe("public API", () => {
     const reason = new Error("stop");
     controller.abort(reason);
 
-    await expect(
-      namedFetch("https://example.com", { signal: controller.signal }),
-    ).rejects.toBe(reason);
+    await expect(namedFetch("https://example.com", { signal: controller.signal })).rejects.toBe(
+      reason,
+    );
     expect(native.requests).toHaveLength(0);
   });
 
@@ -118,10 +109,9 @@ describe("public API", () => {
     const native = new FakeNativeBinding();
     setNativeBindingForTesting(native);
 
-    await expect(
-      namedFetch("https://example.com", { timeout: -1 }),
-    ).rejects.toThrow("timeout must be a finite, non-negative number");
+    await expect(namedFetch("https://example.com", { timeout: -1 })).rejects.toThrow(
+      "timeout must be a finite, non-negative number",
+    );
     expect(native.requests).toHaveLength(0);
   });
 });
-

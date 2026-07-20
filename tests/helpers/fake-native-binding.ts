@@ -25,9 +25,7 @@ export class FakeNativeBinding implements NativeBinding {
   #chunks = new Map<bigint, Uint8Array[]>();
   #responseFactory: (request: NativeRequest) => FakeResponse;
 
-  constructor(
-    responseFactory: (request: NativeRequest) => FakeResponse = () => ({}),
-  ) {
+  constructor(responseFactory: (request: NativeRequest) => FakeResponse = () => ({})) {
     this.#responseFactory = responseFactory;
   }
 
@@ -81,4 +79,3 @@ export class FakeNativeBinding implements NativeBinding {
     };
   }
 }
-

@@ -17,13 +17,7 @@
   "$defs": {
     "target": {
       "type": "object",
-      "required": [
-        "rustTarget",
-        "npmOs",
-        "npmCpu",
-        "link",
-        "assetPlatform"
-      ],
+      "required": ["rustTarget", "npmOs", "npmCpu", "link", "assetPlatform"],
       "properties": {
         "rustTarget": { "type": "string", "minLength": 1 },
         "npmOs": { "enum": ["android", "darwin", "linux", "win32"] },

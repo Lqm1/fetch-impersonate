@@ -10,4 +10,3 @@ export type {
   ImpersonateRequestInit,
   ImpersonateTarget,
 } from "./options.js";
-

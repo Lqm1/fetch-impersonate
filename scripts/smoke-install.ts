@@ -28,14 +28,18 @@ try {
   const rootTarball = await pack(root, packDirectory);
   await writeFile(
     join(installDirectory, "package.json"),
-    JSON.stringify({
-      private: true,
-      type: "module",
-      dependencies: {
-        "fetch-impersonate": `file:${join(packDirectory, rootTarball)}`,
-        [nativePackage.name]: `file:${join(packDirectory, nativeTarball)}`,
+    JSON.stringify(
+      {
+        private: true,
+        type: "module",
+        dependencies: {
+          "fetch-impersonate": `file:${join(packDirectory, rootTarball)}`,
+          [nativePackage.name]: `file:${join(packDirectory, nativeTarball)}`,
+        },
       },
-    }, null, 2),
+      null,
+      2,
+    ),
   );
   await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund"], installDirectory);
   await run(
@@ -89,8 +93,12 @@ async function run(command: string, args: string[], cwd: string): Promise<string
     const child = spawn(executable, executableArguments, { cwd, shell: useShell });
     let stdout = "";
     let stderr = "";
-    child.stdout.on("data", (chunk: Buffer) => { stdout += chunk.toString(); });
-    child.stderr.on("data", (chunk: Buffer) => { stderr += chunk.toString(); });
+    child.stdout.on("data", (chunk: Buffer) => {
+      stdout += chunk.toString();
+    });
+    child.stderr.on("data", (chunk: Buffer) => {
+      stderr += chunk.toString();
+    });
     child.on("error", rejectRun);
     child.on("exit", (code) => {
       if (code === 0) resolveRun(stdout);

@@ -1,9 +1,6 @@
 import type { NativeErrorInfo } from "./native-types.js";
 
-export function mapNativeError(
-  error: NativeErrorInfo,
-  abortReason?: unknown,
-): unknown {
+export function mapNativeError(error: NativeErrorInfo, abortReason?: unknown): unknown {
   switch (error.kind) {
     case "invalidArgument":
       return new TypeError(error.message);

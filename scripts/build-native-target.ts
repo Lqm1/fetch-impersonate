@@ -3,53 +3,54 @@ import { copyFile, readFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { spawnSync } from "node:child_process";
 
-interface NativeTarget { rustTarget: string }
+interface NativeTarget {
+  rustTarget: string;
+}
 
 const root = resolve(import.meta.dirname, "..");
 const target = readTargetArgument() ?? detectTarget();
-const targets = JSON.parse(
-  await readFile(join(root, "native-targets.json"), "utf8"),
-) as Record<string, NativeTarget>;
+const targets = JSON.parse(await readFile(join(root, "native-targets.json"), "utf8")) as Record<
+  string,
+  NativeTarget
+>;
 const config = targets[target];
 if (config === undefined) throw new Error(`Unknown native target: ${target}`);
 
 run("rustup", ["target", "add", config.rustTarget]);
 const environment = configureCompilers(target, config.rustTarget);
 if (target === "android-arm64") {
-  run("cargo", [
-    "build",
-    "--release",
-    "--package",
-    "fetch-impersonate-native",
-    "--target",
-    config.rustTarget,
-  ], environment);
+  run(
+    "cargo",
+    ["build", "--release", "--package", "fetch-impersonate-native", "--target", config.rustTarget],
+    environment,
+  );
   await copyFile(
     join(root, "target", config.rustTarget, "release", "libfetch_impersonate_native.so"),
     join(root, "crates", "native", `fetch-impersonate.${target}.node`),
   );
 } else {
-  run(process.platform === "win32" ? "pnpm.exe" : "pnpm", [
-    "exec",
-    "napi",
-    "build",
-    "--platform",
-    "--release",
-    "--manifest-path",
-    "crates/native/Cargo.toml",
-    "--package-json-path",
-    "package.json",
-    "--output-dir",
-    "crates/native",
-    "--target",
-    config.rustTarget,
-  ], environment);
+  run(
+    process.platform === "win32" ? "pnpm.exe" : "pnpm",
+    [
+      "exec",
+      "napi",
+      "build",
+      "--platform",
+      "--release",
+      "--manifest-path",
+      "crates/native/Cargo.toml",
+      "--package-json-path",
+      "package.json",
+      "--output-dir",
+      "crates/native",
+      "--target",
+      config.rustTarget,
+    ],
+    environment,
+  );
 }
 
-function configureCompilers(
-  target: string,
-  rustTarget: string,
-): NodeJS.ProcessEnv {
+function configureCompilers(target: string, rustTarget: string): NodeJS.ProcessEnv {
   const environment = { ...process.env };
   const targetKey = rustTarget.replaceAll("-", "_");
   const cargoKey = rustTarget.replaceAll("-", "_").toUpperCase();
@@ -70,11 +71,12 @@ function configureCompilers(
     if (ndk === undefined) {
       throw new Error("ANDROID_NDK_HOME must point to an installed Android NDK");
     }
-    const prebuilt = process.platform === "win32"
-      ? "windows-x86_64"
-      : process.platform === "darwin"
-        ? "darwin-x86_64"
-        : "linux-x86_64";
+    const prebuilt =
+      process.platform === "win32"
+        ? "windows-x86_64"
+        : process.platform === "darwin"
+          ? "darwin-x86_64"
+          : "linux-x86_64";
     const suffix = process.platform === "win32" ? ".cmd" : "";
     const bin = join(ndk, "toolchains", "llvm", "prebuilt", prebuilt, "bin");
     const cc = join(bin, `aarch64-linux-android24-clang${suffix}`);
